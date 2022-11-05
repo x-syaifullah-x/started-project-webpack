@@ -1,0 +1,50 @@
+name: started_project_webpack
+
+on:
+  push:
+    branches: 
+      - "*"
+jobs:
+  started_project_webpack:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REF_NAME: ${{ github.ref_name }}
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: NPM Install
+        run: rm -rf ~/.npm && npm install
+
+      - name: NPM Run Lint
+        run: npm run lint
+
+      - name: NPM Run Build
+        run: npm run build
+
+      - name: Generate APP_VERSION
+        run: |
+          VERSION=$(npm pkg get version | tr -d '"')
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Get Node Modules
+        run: |
+          _NODE_MODULES_XZ=/tmp/node_modules.tar.xz
+          tar cf $_NODE_MODULES_XZ node_modules --use-compress-program="xz -9 -v"
+          echo "NODE_MODULES_XZ=$_NODE_MODULES_XZ" >> $GITHUB_ENV
+
+      - name: Upload Artifact
+        run: |
+          _APP_VERSION="v$APP_VERSION"
+          gh release delete "${_APP_VERSION}" --yes || true
+          gh release create "${_APP_VERSION}" --title "$_APP_VERSION" --latest=true --generate-notes || true
+          gh release upload "${_APP_VERSION}" \
+          $NODE_MODULES_XZ \
+          --clobber

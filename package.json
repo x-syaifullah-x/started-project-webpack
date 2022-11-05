@@ -1,0 +1,32 @@
+{
+    "name": "started-project-webpack",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "src/app.js",
+    "scripts": {
+        "dev": "webpack-dev-server --config config/webpack.dev.js --host localhost",
+        "build": "webpack --progress --config config/webpack.prod.js",
+        "lint": "eslint ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/webpack": "5.28.5",
+        "eslint": "8.56.0",
+        "eslint-config-standard": "17.1.0",
+        "eslint-import-resolver-node": "0.3.9",
+        "eslint-plugin-import": "2.29.1",
+        "eslint-plugin-node": "11.1.0",
+        "eslint-plugin-promise": "6.1.1",
+        "html-loader": "5.0.0",
+        "html-webpack-plugin": "5.6.0",
+        "ts-loader": "9.5.1",
+        "typescript": "5.3.3",
+        "webpack-cli": "5.1.4",
+        "webpack-dev-server": "4.15.1",
+        "webpack-pwa-manifest": "4.3.0",
+        "workbox-webpack-plugin": "7.0.0"
+    }
+}
